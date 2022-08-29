@@ -1,6 +1,7 @@
 package com.barclays.service;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +13,11 @@ import com.microsoft.graph.models.Chat;
 import com.microsoft.graph.models.ChatMessage;
 import com.microsoft.graph.models.ChatMessageAttachment;
 import com.microsoft.graph.models.ChatMessageImportance;
-import com.microsoft.graph.models.ChatMessageType;
 import com.microsoft.graph.models.ChatType;
 import com.microsoft.graph.models.ConversationMember;
 import com.microsoft.graph.models.ItemBody;
+import com.microsoft.graph.requests.ChatCollectionPage;
+import com.microsoft.graph.requests.ChatMessageCollectionPage;
 import com.microsoft.graph.requests.ConversationMemberCollectionPage;
 import com.microsoft.graph.requests.ConversationMemberCollectionResponse;
 
@@ -44,6 +46,13 @@ public class GroupService {
 		members1.roles = rolesList1;
 		members1.additionalDataManager().put("user@odata.bind", new JsonPrimitive("https://graph.microsoft.com/v1.0/users('vinitpatil@6sscnx.onmicrosoft.com')"));
 		membersList.add(members1);
+		AadUserConversationMember members2 = new AadUserConversationMember();
+		LinkedList<String> rolesList2 = new LinkedList<String>();
+		rolesList2.add("owner");
+		members2.additionalDataManager().put("@odata.type", new JsonPrimitive("#microsoft.graph.aadUserConversationMember"));
+		members2.roles = rolesList2;
+		members2.additionalDataManager().put("user@odata.bind", new JsonPrimitive("https://graph.microsoft.com/v1.0/users('ashishurfravi@6sscnx.onmicrosoft.com')"));
+		membersList.add(members2);
 		
 		ConversationMemberCollectionResponse conversationMemberCollectionResponse = new ConversationMemberCollectionResponse();
 		conversationMemberCollectionResponse.value = membersList;
@@ -78,5 +87,23 @@ public class GroupService {
 		graphSerivice.getGraphClient().chats(groupId).messages()
 		.buildRequest()
 		.post(chatMessage);
+	}
+	
+	public List<ChatMessage> getChat(String groupName) {
+		
+		String filterString = "topic eq '" + groupName + "'";
+		
+		ChatCollectionPage chats = graphSerivice.getGraphClient().me().chats()
+				.buildRequest()
+				.filter(filterString)
+				.get();
+		
+		System.out.println(chats.getCurrentPage().get(0).id);
+		ChatMessageCollectionPage chat = graphSerivice.getGraphClient().chats(chats.getCurrentPage().get(0).id).messages()
+				.buildRequest()
+				.get();
+		
+		return chat.getCurrentPage();
+		
 	}
 }

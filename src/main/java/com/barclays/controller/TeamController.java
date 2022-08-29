@@ -1,11 +1,13 @@
 package com.barclays.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.barclays.service.GraphService;
+import com.barclays.service.MessageWatchService;
 import com.barclays.service.TeamService;
 import com.microsoft.graph.models.Team;
 
@@ -19,6 +21,9 @@ public class TeamController {
 	@Autowired
 	private TeamService teamService;
 	
+	@Autowired
+	private ApplicationContext applicationContext;
+	
 	@GetMapping("/initialize")
 	public void initializeClient() {
 		System.out.println("Java Graph Tutorial");
@@ -27,6 +32,8 @@ public class TeamController {
         try {
             graphservice.initializeGraphForUserAuth(
                 challenge -> System.out.println(challenge.getMessage()));
+            
+//            applicationContext.getBean(MessageWatchService.class).watchMessage();
         } catch (Exception e)
         {
             System.out.println("Error initializing Graph for user auth");

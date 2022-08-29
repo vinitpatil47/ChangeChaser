@@ -22,5 +22,11 @@ public class UserService {
             .select("displayName,mail,userPrincipalName")
             .get();
     }
+	
+	public User getUser(String userId) {
+		return this.graphService.getGraphClient().users(userId)
+			.buildRequest()
+			.get();
+	}
 
 }
