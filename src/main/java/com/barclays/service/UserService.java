@@ -3,6 +3,7 @@ package com.barclays.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.microsoft.graph.models.Presence;
 import com.microsoft.graph.models.User;
 
 @Service
@@ -27,6 +28,26 @@ public class UserService {
 		return this.graphService.getGraphClient().users(userId)
 			.buildRequest()
 			.get();
+	}
+	
+	public User getUserByEmail(String userEmail) {
+		User user = graphService.getGraphClient().users(userEmail)
+				.buildRequest()
+				.get();
+		
+		return user;
+	}
+	
+	public String getStatus(String userId) {
+		try {
+			Presence presence = graphService.getGraphClient().users(userId).presence()
+					.buildRequest()
+					.get();
+			return presence.availability;
+		} catch (NullPointerException expection) {
+			return null;
+		}
+		
 	}
 
 }
