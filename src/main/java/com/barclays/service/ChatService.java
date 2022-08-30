@@ -1,10 +1,14 @@
 package com.barclays.service;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.barclays.model.ChangeRequest;
+import com.barclays.repository.ChangeRequestRepository;
 import com.google.gson.JsonPrimitive;
 import com.microsoft.graph.models.AadUserConversationMember;
 import com.microsoft.graph.models.BodyType;
@@ -27,6 +31,9 @@ public class ChatService {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ChangeRequestRepository changeRequestRepository;
 	
 	public String createChat(String userEmail) {
 		Chat chat = new Chat();
@@ -105,4 +112,50 @@ public class ChatService {
 			.post(chatMessage);
 		
 	}
+	
+	public List<String> getByteOptizer() {
+		List<String> list = new ArrayList<String>();
+		list.add("vinitpatil@6sscnx.onmicrosoft.com");
+		list.add("ashishurfravi@6sscnx.onmicrosoft.com");
+		
+		return list;
+	}
+	
+	public List<String> getBitOptizer() {
+		List<String> list = new ArrayList<String>();
+		list.add("mayurshah@6sscnx.onmicrosoft.com");
+		
+		return list;
+	}
+	
+//	public void checkAndSendSimpleChat(boolean check) {
+//		List<ChangeRequest> changeRequest = (List<ChangeRequest>) changeRequestRepository.findAll();
+//		try {
+//			for(ChangeRequest change : changeRequest) {
+//				if(change.getState() == 0 || !check) {
+//					if(change.getAssignGroup().equals("Byte~Optimizer")) {
+//						List<String> list = getByteOptizer();
+//						for(String l : list) {
+//							String status = userService.getStatus(userService.getUserByEmail(l).id);
+//							if(status.equals("Available")) {
+//								sendChat(l);
+//								change.setState(1);
+//								changeRequestRepository.save(change);
+//							}
+//						}
+//					}
+//				}
+//			}
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+//	}
+//	
+//	public void checkAndSendRecurringChat() {
+//		try {
+//			checkAndSendSimpleChat(false);
+//		} catch(Exception ex) {
+//			
+//		}
+//	}
 }
