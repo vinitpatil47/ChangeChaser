@@ -1,6 +1,5 @@
 package com.barclays.service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -21,6 +20,8 @@ import com.microsoft.graph.models.ChatMessageImportance;
 import com.microsoft.graph.models.ChatType;
 import com.microsoft.graph.models.ConversationMember;
 import com.microsoft.graph.models.ItemBody;
+import com.microsoft.graph.options.HeaderOption;
+import com.microsoft.graph.options.Option;
 import com.microsoft.graph.requests.ChatCollectionPage;
 import com.microsoft.graph.requests.ConversationMemberCollectionPage;
 import com.microsoft.graph.requests.ConversationMemberCollectionResponse;
@@ -117,7 +118,7 @@ public class ChatService {
 		return false;
 	}
 	
-	public ChatMessage getSimpleMessage(ChangeRequest change) {
+	public ChatMessage getSimpleMessage(ChangeRequest change, String chatId) {
 		ChatMessage chatMessage = new ChatMessage();
 		chatMessage.subject = null;
 		ItemBody body = new ItemBody();
@@ -129,7 +130,7 @@ public class ChatService {
 		attachments.id = "74d20c7f34aa4a7fb74e2b30004247c5";
 		attachments.contentType = "application/vnd.microsoft.card.adaptive";
 		attachments.contentUrl = null;
-		attachments.content = "{\"$schema\":\"http://adaptivecards.io/schemas/adaptive-card.json\",\"type\":\"AdaptiveCard\",\"version\":\"1.0\",\"body\":[{\"type\":\"Container\",\"items\":[{\"type\":\"TextBlock\",\"text\":\"[" + change.getChangeRecord() +"](https://dev82962.service-now.com/change_request.do?sys_id=" + change.getSysId() + ") Approval\",\"weight\":\"bolder\",\"size\":\"large\"}]},{\"type\":\"Container\",\"items\":[{\"type\":\"TextBlock\",\"text\":\"Risk: " + change.getRisk() + "\",\"weight\":\"bolder\",\"color\":\"attention\",\"wrap\":true},{\"type\":\"TextBlock\",\"text\":\"Change implementation starts at GMT " + change.getPlannedStartDate() + "\",\"weight\":\"bolder\",\"wrap\":true},{\"type\":\"FactSet\",\"facts\":[{\"title\":\"Short Description:\",\"value\":\"" + change.getShortDescription() + "\"},{\"title\":\"Justification:\",\"value\":\"" + change.getJustification() +"\"}]}]}],\"actions\":[{\"type\":\"Action.OpenUrl\",\"title\":\"Approve\",\"url\":\"http://localhost:8084/approve/" + change.getChangeRecord() + "\"},{\"type\":\"Action.OpenUrl\",\"title\":\"Reject\",\"url\":\"http://localhost:8084/reject/" + change.getChangeRecord() + "\"}]}";
+		attachments.content = "{\"$schema\":\"http://adaptivecards.io/schemas/adaptive-card.json\",\"type\":\"AdaptiveCard\",\"version\":\"1.0\",\"body\":[{\"type\":\"Container\",\"items\":[{\"type\":\"TextBlock\",\"text\":\"[" + change.getChangeRecord() +"](https://dev82962.service-now.com/change_request.do?sys_id=" + change.getSysId() + ") Approval\",\"weight\":\"bolder\",\"size\":\"large\"}]},{\"type\":\"Container\",\"items\":[{\"type\":\"TextBlock\",\"text\":\"Risk: " + change.getRisk() + "\",\"weight\":\"bolder\",\"color\":\"attention\",\"wrap\":true},{\"type\":\"TextBlock\",\"text\":\"Change implementation starts at EST " + change.getPlannedStartDate() + "\",\"weight\":\"bolder\",\"wrap\":true},{\"type\":\"FactSet\",\"facts\":[{\"title\":\"Short Description:\",\"value\":\"" + change.getShortDescription() + "\"},{\"title\":\"Justification:\",\"value\":\"" + change.getJustification() +"\"}]}]}],\"actions\":[{\"type\":\"Action.OpenUrl\",\"title\":\"Approve\",\"url\":\"http://localhost:8084/approve/" + change.getChangeRecord() + "\"},{\"type\":\"Action.OpenUrl\",\"title\":\"Reject\",\"url\":\"http://localhost:8084/reject/" + change.getChangeRecord() + "\"},{\"type\":\"Action.OpenUrl\",\"title\":\"View Details\",\"url\":\"http://localhost:8084/changerequest/" + change.getChangeRecord() + "/" + chatId + "\"}]}";
 		attachments.name = null;
 		attachments.thumbnailUrl = null;
 		attachmentsList.add(attachments);
@@ -138,7 +139,7 @@ public class ChatService {
 		return chatMessage;
 	}
 	
-	public ChatMessage getUrgentMessage(ChangeRequest change) {
+	public ChatMessage getUrgentMessage(ChangeRequest change, String chatId) {
 		ChatMessage chatMessage = new ChatMessage();
 		chatMessage.subject = null;
 		chatMessage.importance = ChatMessageImportance.URGENT;
@@ -151,7 +152,7 @@ public class ChatService {
 		attachments.id = "74d20c7f34aa4a7fb74e2b30004247c5";
 		attachments.contentType = "application/vnd.microsoft.card.adaptive";
 		attachments.contentUrl = null;
-		attachments.content = "{\"$schema\":\"http://adaptivecards.io/schemas/adaptive-card.json\",\"type\":\"AdaptiveCard\",\"version\":\"1.0\",\"body\":[{\"type\":\"Container\",\"items\":[{\"type\":\"TextBlock\",\"text\":\"[" + change.getChangeRecord() +"](https://dev82962.service-now.com/change_request.do?sys_id=" + change.getSysId() + ") Approval\",\"weight\":\"bolder\",\"size\":\"large\"}]},{\"type\":\"Container\",\"items\":[{\"type\":\"TextBlock\",\"text\":\"Risk: " + change.getRisk() + "\",\"weight\":\"bolder\",\"color\":\"attention\",\"wrap\":true},{\"type\":\"TextBlock\",\"text\":\"Change implementation starts at GMT " + change.getPlannedStartDate() + "\",\"weight\":\"bolder\",\"wrap\":true},{\"type\":\"FactSet\",\"facts\":[{\"title\":\"Short Description:\",\"value\":\"" + change.getShortDescription() + "\"},{\"title\":\"Justification:\",\"value\":\"" + change.getJustification() +"\"}]}]}],\"actions\":[{\"type\":\"Action.OpenUrl\",\"title\":\"Approve\",\"url\":\"http://localhost:8084/approve/" + change.getChangeRecord() + "\"},{\"type\":\"Action.OpenUrl\",\"title\":\"Reject\",\"url\":\"http://localhost:8084/reject/" + change.getChangeRecord() + "\"}]}";
+		attachments.content = "{\"$schema\":\"http://adaptivecards.io/schemas/adaptive-card.json\",\"type\":\"AdaptiveCard\",\"version\":\"1.0\",\"body\":[{\"type\":\"Container\",\"items\":[{\"type\":\"TextBlock\",\"text\":\"[" + change.getChangeRecord() +"](https://dev82962.service-now.com/change_request.do?sys_id=" + change.getSysId() + ") Approval\",\"weight\":\"bolder\",\"size\":\"large\"}]},{\"type\":\"Container\",\"items\":[{\"type\":\"TextBlock\",\"text\":\"Risk: " + change.getRisk() + "\",\"weight\":\"bolder\",\"color\":\"attention\",\"wrap\":true},{\"type\":\"TextBlock\",\"text\":\"Change implementation starts at EST " + change.getPlannedStartDate() + "\",\"weight\":\"bolder\",\"wrap\":true},{\"type\":\"FactSet\",\"facts\":[{\"title\":\"Short Description:\",\"value\":\"" + change.getShortDescription() + "\"},{\"title\":\"Justification:\",\"value\":\"" + change.getJustification() +"\"}]}]}],\"actions\":[{\"type\":\"Action.OpenUrl\",\"title\":\"Approve\",\"url\":\"http://localhost:8084/approve/" + change.getChangeRecord() + "\"},{\"type\":\"Action.OpenUrl\",\"title\":\"Reject\",\"url\":\"http://localhost:8084/reject/" + change.getChangeRecord() + "\"},{\"type\":\"Action.OpenUrl\",\"title\":\"View Details\",\"url\":\"http://localhost:8084/changerequest/" + change.getChangeRecord() + "/" + chatId + "\"}]}";
 		attachments.name = null;
 		attachments.thumbnailUrl = null;
 		attachmentsList.add(attachments);
@@ -189,7 +190,7 @@ public class ChatService {
 		attachments.contentType = "application/vnd.microsoft.card.adaptive";
 		attachments.contentUrl = null;
 //		attachments.content = "{\"$schema\":\"http://adaptivecards.io/schemas/adaptive-card.json\",\"type\":\"AdaptiveCard\",\"version\":\"1.0\",\"body\":[{\"type\":\"Container\",\"items\":[{\"type\":\"TextBlock\",\"text\":\"[" + change.getChangeRecord() +"](https://dev82962.service-now.com/change_request.do?sys_id=" + change.getSysId() + ") Approval\",\"weight\":\"bolder\",\"size\":\"large\"}]},{\"type\":\"Container\",\"items\":[{\"type\":\"TextBlock\",\"text\":\"Risk: " + change.getRisk() + "\",\"weight\":\"bolder\",\"color\":\"attention\",\"wrap\":true},{\"type\":\"TextBlock\",\"text\":\"Change implementation starts at GMT " + change.getPlannedStartDate() + "\",\"weight\":\"bolder\",\"wrap\":true},{\"type\":\"FactSet\",\"facts\":[{\"title\":\"Short Description:\",\"value\":\"" + change.getShortDescription() + "\"},{\"title\":\"Justification:\",\"value\":\"" + change.getJustification() +"\"}]}]}],\"actions\":[{\"type\":\"Action.OpenUrl\",\"title\":\"Approve\",\"url\":\"http://localhost:8084/approve/" + change.getChangeRecord() + "\"},{\"type\":\"Action.OpenUrl\",\"title\":\"Reject\",\"url\":\"http://localhost:8084/reject/" + change.getChangeRecord() + "\"}]}";
-		attachments.content = "{\"$schema\":\"http://adaptivecards.io/schemas/adaptive-card.json\",\"type\":\"AdaptiveCard\",\"version\":\"1.0\",\"body\":[{\"type\":\"Container\",\"items\":[{\"type\":\"TextBlock\",\"text\":\"[" + change.getChangeRecord() + "](https://dev82962.service-now.com/change_request.do?sys_id=" + change.getSysId() + ") Details\",\"weight\":\"bolder\",\"size\":\"large\"}]},{\"type\":\"Container\",\"items\":[{\"type\":\"TextBlock\",\"text\":\"Risk: " + change.getRisk() + "\",\"weight\":\"bolder\",\"color\":\"attention\",\"wrap\":true},{\"type\":\"FactSet\",\"facts\":[{\"title\":\"Description:\",\"value\":\"" + change.getDescription() + "\"},{\"title\":\"Assign Group:\",\"value\":\"" + change.getAssignGroup() + "\"},{\"title\":\"Planned Start Date:\",\"value\":\"" + change.getPlannedStartDate() + "\"},{\"title\":\"Planned End Date:\",\"value\":\"" + change.getPlannedEndDate() + "\"},{\"title\":\"State:\",\"value\":\"" + change.getState() + "\"},{\"title\":\"Justification:\",\"value\":\"" + change.getJustification() + "\"},{\"title\":\"Test Plan:\",\"value\":\"" + change.getTestPlan() + "\"},{\"title\":\"Implementation Plan:\",\"value\":\"" + change.getImplementationPlan() + "\"},{\"title\":\"Risk Impact Analysis:\",\"value\":\"" + change.getRiskImpactAnalysis() + "\"},{\"title\":\"Backout Plan:\",\"value\":\"" + change.getBackoutPlan() + "\"}]}]}],\"actions\":[{\"type\":\"Action.OpenUrl\",\"title\":\"Approve\",\"url\":\"http://localhost:8084/approve/" + change.getChangeRecord() + "\"},{\"type\":\"Action.OpenUrl\",\"title\":\"Reject\",\"url\":\"http://localhost:8084/reject/" + change.getChangeRecord() + "\"}]}";
+		attachments.content = "{\"$schema\":\"http://adaptivecards.io/schemas/adaptive-card.json\",\"type\":\"AdaptiveCard\",\"version\":\"1.0\",\"body\":[{\"type\":\"Container\",\"items\":[{\"type\":\"TextBlock\",\"text\":\"[" + change.getChangeRecord() + "](https://dev82962.service-now.com/change_request.do?sys_id=" + change.getSysId() + ") Details\",\"weight\":\"bolder\",\"size\":\"large\"}]},{\"type\":\"Container\",\"items\":[{\"type\":\"TextBlock\",\"text\":\"Risk: " + change.getRisk() + "\",\"weight\":\"bolder\",\"color\":\"attention\",\"wrap\":true},{\"type\":\"FactSet\",\"facts\":[{\"title\":\"Description:\",\"value\":\"" + change.getDescription() + "\"},{\"title\":\"Assign Group:\",\"value\":\"" + change.getAssignGroup() + "\"},{\"title\":\"Planned Start Date:\",\"value\":\"" + change.getPlannedStartDate() + " EST\"},{\"title\":\"Planned End Date:\",\"value\":\"" + change.getPlannedEndDate() + " EST\"},{\"title\":\"State:\",\"value\":\"" + change.getState() + "\"},{\"title\":\"Justification:\",\"value\":\"" + change.getJustification() + "\"},{\"title\":\"Test Plan:\",\"value\":\"" + change.getTestPlan() + "\"},{\"title\":\"Implementation Plan:\",\"value\":\"" + change.getImplementationPlan() + "\"},{\"title\":\"Risk Impact Analysis:\",\"value\":\"" + change.getRiskImpactAnalysis() + "\"},{\"title\":\"Backout Plan:\",\"value\":\"" + change.getBackoutPlan() + "\"}]}]}],\"actions\":[{\"type\":\"Action.OpenUrl\",\"title\":\"Approve\",\"url\":\"http://localhost:8084/approve/" + change.getChangeRecord() + "\"},{\"type\":\"Action.OpenUrl\",\"title\":\"Reject\",\"url\":\"http://localhost:8084/reject/" + change.getChangeRecord() + "\"}]}";
 		attachments.name = null;
 		attachments.thumbnailUrl = null;
 		attachmentsList.add(attachments);
@@ -198,25 +199,29 @@ public class ChatService {
 		return chatMessage;
 	}
 	
-	public void sendDetailsMessage(ChangeRequest change, String chatId) {
-		
-	}
-	
 	public void sendChat(String userEmail, ChangeRequest change) {
 		String chatId = getChat(userEmail);
 		
 		ChatMessage chatMessage = null;
 		if(change.getFlag() == 0)
-			chatMessage = getSimpleMessage(change);
+			chatMessage = getSimpleMessage(change, chatId);
 		else if(change.getFlag() == 1)
-			chatMessage = getUrgentMessage(change);
+			chatMessage = getUrgentMessage(change, chatId);
 		else if(change.getFlag() == 3)
 			chatMessage = getThankYouMessage(change.getChangeRecord());
 		else if(change.getFlag() == 4)
 			chatMessage = getApologyMessage(change.getChangeRecord());
 		
+//		RequestOptions options = new RequestOptions()
+//				.addRequestCallback(request -> request
+//		         .setHeader("Content-Type", "application/json"));
+		
+//		List<Option> options = new ArrayList<>();
+//		Option o = new Option();
+//		options.add(new Option("", ""));
+		
 		graphService.getGraphClient().chats(chatId).messages()
-			.buildRequest()
+			.buildRequest(new HeaderOption("Content-Type","application/json"))
 			.post(chatMessage);
 	}
 	
@@ -264,21 +269,15 @@ public class ChatService {
 					}
 				} else if(change.getFlag() == 3) {
 					for(String l : list) {
-						String status = userService.getStatus(userService.getUserByEmail(l).id);
-						if(status.equals("Available")) {
-							sendChat(l, change);
-							change.setFlag(5);
-							changeRequestRepository.save(change);
-						}
+						sendChat(l, change);
+						change.setFlag(5);
+						changeRequestRepository.save(change);
 					}
 				} else if(change.getFlag() == 4) {
 					for(String l : list) {
-						String status = userService.getStatus(userService.getUserByEmail(l).id);
-						if(status.equals("Available")) {
-							sendChat(l, change);
-							change.setFlag(5);
-							changeRequestRepository.save(change);
-						}
+						sendChat(l, change);
+						change.setFlag(5);
+						changeRequestRepository.save(change);
 					}
 				}
 			}
@@ -297,6 +296,12 @@ public class ChatService {
 	
 	public void sendDetailsMessage(String changeNo, String chatId) {
 		ChangeRequest changeRequest = changeRequestRepository.findByChangeRecord(changeNo);
+		
+		ChatMessage chatMessage = getDetailsMessage(changeRequest);
+		
+		graphService.getGraphClient().chats(chatId).messages()
+		.buildRequest()
+		.post(chatMessage);
 		
 	}
 }
