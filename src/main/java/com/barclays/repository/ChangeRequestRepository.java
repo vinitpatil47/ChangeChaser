@@ -6,4 +6,5 @@ import com.barclays.model.ChangeRequest;
 
 public interface ChangeRequestRepository extends CrudRepository<ChangeRequest, String> {
 
+	public ChangeRequest findByChangeRecord(String changeRecord);
 }

@@ -28,9 +28,9 @@ public class MessageWatchService {
 	@Autowired
 	private UserService userService;
 	
-	@Scheduled(fixedDelay = 10000)
-	public void watch() {
-		System.out.println("Hello");
-		System.out.println(userService.getStatus("fe6092a8-a0ea-4473-b808-56d5f852e08b"));
-	}
+//	@Scheduled(fixedDelay = 10000)
+//	public void watch() {
+//		System.out.println("Hello");
+//		System.out.println(userService.getStatus("fe6092a8-a0ea-4473-b808-56d5f852e08b"));
+//	}
 }
